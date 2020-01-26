@@ -1,0 +1,62 @@
+﻿@model Invoices.Data.Models.Invoice
+
+<div class="row">
+	<div class="col-md-4">
+		<form>
+			<div class="form-group">
+				<h6 class="control-label"><b>Name:</b> @Model.Name</h6>
+			</div>
+		</form>
+	</div>
+	<div class="col-md-4">
+		<form>
+			<div class="form-group">
+				<h6 class="control-label"><b>Email:</b> @Model.Email</h6>
+			</div>
+		</form>
+	</div>
+	<div class="col-md-4">
+		<form>
+			<div class="form-group">
+				<h6 class="control-label"><b>Address:</b> @Model.Address</h6>
+			</div>
+		</form>
+	</div>
+</div>
+
+@{var dummyOrder = Model.Orders.First();}
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => dummyOrder.ProductName)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => dummyOrder.Price)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => dummyOrder.PurchaseDateTime)
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.Orders)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.ProductName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Price)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.PurchaseDateTime)
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+<hr />
+<h6>Total Price: @Model.TotalPrice</h6>

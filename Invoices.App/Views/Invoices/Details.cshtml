@@ -1,0 +1,34 @@
+﻿@using Microsoft.Extensions.Configuration
+@using Invoices.Data.Models;
+@inject IConfiguration Config
+@model Invoice
+
+@{
+	ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+@{await Html.RenderPartialAsync("_InvoiceDetails", Model);}
+
+<br />
+<div>
+	@{
+		if (Model.State.Equals(InvoiceState.Created))
+		{
+			@Html.ActionLink(linkText: "Approve", actionName: "ConfirmApprove", routeValues: new { id = @Model.Id }, htmlAttributes: new { @class = "btn btn-outline-primary btn-sm" })
+		}
+		else
+		{
+			@Html.ActionLink(linkText: "Approve", actionName: "", routeValues: new { }, htmlAttributes: new { @class = "btn btn-outline-primary btn-sm disabled" })
+		}
+	}
+	<a class="btn btn-outline-primary btn-sm"
+	   href="@Config.GetConnectionString("OrdersConnection")orders/orderhistory?profileId=@Model.ProfileId">View Order History</a>
+</div>
+
+<hr />
+
+<div>
+	<a asp-action="Index">Back to List</a>
+</div>

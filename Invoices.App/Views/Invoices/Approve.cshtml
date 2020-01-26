@@ -1,0 +1,29 @@
+﻿@model Invoices.Data.Models.Invoice
+
+@{
+	ViewData["Title"] = "Approve";
+}
+
+<h1>Approve</h1>
+
+<hr />
+<h4>Are you sure you want to approve this invoice?</h4>
+<h6>This invoice will be sent to @Model.Email.</h6>
+<br />
+
+@{await Html.RenderPartialAsync("_InvoiceDetails", Model);}
+
+<br />
+<div>
+	@Html.ActionLink(linkText: "Approve", actionName: "ConfirmApprove", routeValues: new { id = Model.Id }, htmlAttributes: new { @class = "btn btn-outline-primary" })
+</div>
+
+<hr />
+
+<div>
+	<a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
