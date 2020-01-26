@@ -21,7 +21,7 @@ namespace Invoices.App
 				if (env.IsDevelopment())
 				{
 					var context = services.GetRequiredService<InvoicesDbContext>();
-					context.Database.EnsureDeleted();
+					//context.Database.EnsureDeleted();
 					context.Database.Migrate();
 					try
 					{
