@@ -7,7 +7,7 @@ using Invoices.App.Services.Orders;
 
 namespace Invoices.App.Controllers
 {
-    [Route("api/invoices")]
+    [Route("invoices/api")]
     [ApiController]
     public class InvoicesApiController : ControllerBase
     {
