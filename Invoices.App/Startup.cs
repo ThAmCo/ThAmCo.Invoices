@@ -103,6 +103,7 @@ namespace Invoices.App
 					options.Cookie.Path = "/";
 					options.LoginPath = "/Account/Login";
 					options.LogoutPath = "/Account/Logout";
+					options.AccessDeniedPath = "/Home/AccessDenied";
 
 					options.Events.OnRedirectToLogin = context =>
 					{
@@ -118,7 +119,7 @@ namespace Invoices.App
 
 					options.Events.OnRedirectToAccessDenied = context =>
 					{
-						context.HttpContext.Response.Redirect(homeBaseUrl + "/accessdenied");
+						context.HttpContext.Response.Redirect(homeBaseUrl + options.AccessDeniedPath);
 						return Task.CompletedTask;
 					};
 				});
