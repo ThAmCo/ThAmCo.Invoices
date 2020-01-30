@@ -77,7 +77,7 @@ namespace Invoices.App.Controllers
 
 			var indexViewModel = new InvoicesIndexViewModel { Invoices = invoices };
 
-			if (!localInvoice.State.Equals(InvoiceState.Sent))
+			if (localInvoice.State.Equals(InvoiceState.Sent))
 			{
 				indexViewModel.RedirectState = InvoicesIndexRedirectState.ALREADY_APPROVED;
 			}
