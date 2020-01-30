@@ -26,7 +26,7 @@ namespace Invoices.DataAccess.Repository.Invoices
 
 		public async Task<IEnumerable<Invoice>> ForUser(string userId)
 		{
-			return await Including().Where(i => i.UserId.Equals(userId, StringComparison.InvariantCultureIgnoreCase)).ToListAsync();
+			return await Including().Where(i => i.UserId.ToLower().Equals(userId.ToLower())).ToListAsync();
 		}
 	}
 }
