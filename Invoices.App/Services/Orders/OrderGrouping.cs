@@ -1,4 +1,5 @@
 ﻿using Hangfire;
+using Invoices.App.Models;
 using Invoices.Data.Models;
 using System;
 
@@ -16,26 +17,26 @@ namespace Invoices.App.Services.Orders
 			_tracker = tracker;
 		}
 
-		public void AddOrder(Profile profile, Order order)
+		public void AddOrder(CreateInvoiceModel model, Order order)
 		{
 			// No orders for the given profile.
-			if (!_tracker.HasTracking(profile.Id))
+			if (!_tracker.HasTracking(model.UserId))
 			{
-				BackgroundJob.Enqueue<CreateInvoiceJob>(job => job.CreateInvoice(profile, order));
+				BackgroundJob.Enqueue<CreateInvoiceJob>(job => job.CreateInvoice(model, order));
 
 				// Start a delayed background job to check for order changes.
-				BackgroundJob.Schedule(() => CheckChange(profile), _delay);
+				BackgroundJob.Schedule(() => CheckChange(model.UserId), _delay);
 			} else
 			{
 				// Start tracking orders for the given profile.
-				BackgroundJob.Enqueue<CreateInvoiceJob>(job => job.UpdateInvoice(profile.Id, order));
+				BackgroundJob.Enqueue<CreateInvoiceJob>(job => job.UpdateInvoice(model.UserId, order));
 			}
 		}
 
-		public void CheckChange(Profile profile)
+		public void CheckChange(string userId)
 		{
 			// Difference between now and the last order creation.
-			TimeSpan delta = DateTime.Now.Subtract(_tracker.LastChange(profile.Id));
+			TimeSpan delta = DateTime.Now.Subtract(_tracker.LastChange(userId));
 
 			if (delta.CompareTo(_delay) < 0)
 			{
@@ -43,10 +44,10 @@ namespace Invoices.App.Services.Orders
 				TimeSpan newDelay = _delay.Subtract(delta);
 
 				// Schedule a new task 5 minutes from the last received order.
-				BackgroundJob.Schedule(() => CheckChange(profile), newDelay);
+				BackgroundJob.Schedule(() => CheckChange(userId), newDelay);
 			} else
 			{
-				BackgroundJob.Enqueue<CreateInvoiceJob>(job => job.FinaliseInvoice(profile.Id));
+				BackgroundJob.Enqueue<CreateInvoiceJob>(job => job.FinaliseInvoice(userId));
 			}
 		}
 	}

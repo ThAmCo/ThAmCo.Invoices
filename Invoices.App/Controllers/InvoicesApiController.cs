@@ -4,6 +4,8 @@ using Invoices.Data.Models;
 using Invoices.App.Models;
 using Invoices.DataAccess;
 using Invoices.App.Services.Orders;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Invoices.App.Controllers
 {
@@ -22,8 +24,9 @@ namespace Invoices.App.Controllers
 			_unitOfWork = unitOfWork;
 		}
 
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		[HttpPost("postorder")]
-		public async Task<IActionResult> PostOrder([FromBody, Bind("ProfileId,Address,Name,Price,ProductName,Email,PurchaseDateTime")] PostOrderRequest request)
+		public async Task<IActionResult> PostOrder([FromBody, Bind("UserId,Address,Name,Price,ProductName,Email,PurchaseDateTime")] PostOrderRequest request)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -41,12 +44,10 @@ namespace Invoices.App.Controllers
 
 			_unitOfWork.Orders.Update(order);
 
-			var profile = request.GetProfile();
-			_unitOfWork.Profiles.Update(profile);
-
 			await _unitOfWork.Commit();
 
-			_orderGrouping.AddOrder(profile, order);
+			var model = CreateInvoiceModel.FromPostOrderRequest(request);
+			_orderGrouping.AddOrder(model, order);
 
 			return Ok();
 		}

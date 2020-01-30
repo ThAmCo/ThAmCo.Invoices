@@ -12,9 +12,7 @@ namespace Invoices.Data.Models
 		public InvoiceState State { get; set; }
 
 		[Required]
-		public int? ProfileId { get; set; }
-
-		public Profile Profile { get; set; }
+		public string UserId { get; set; }
 
 		[Required]
 		public string Name { get; set; }

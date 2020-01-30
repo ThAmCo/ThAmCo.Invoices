@@ -15,5 +15,11 @@ namespace Invoices.DataAccess.Repository.Invoices
 		{
 			return Task.FromResult(_elements.AsEnumerable());
 		}
+
+		public Task<IEnumerable<Invoice>> ForUser(string userId)
+		{
+			return Task.FromResult(_elements.Where(i => i.UserId.Equals(userId)));
+		}
+
 	}
 }

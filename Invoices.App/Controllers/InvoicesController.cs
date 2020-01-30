@@ -2,6 +2,7 @@
 using Invoices.App.Services.Email;
 using Invoices.Data.Models;
 using Invoices.DataAccess;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
@@ -29,6 +30,7 @@ namespace Invoices.App.Controllers
 			_viewEngine = viewEngine;
 		}
 
+		[Authorize(Policy = "StaffOnly")]
 		public async Task<IActionResult> Index()
 		{
 			var invoices = await _unitOfWork.Invoices.GetAll();
@@ -36,16 +38,38 @@ namespace Invoices.App.Controllers
 			return View(new InvoicesIndexViewModel { Invoices = invoices, RedirectState = InvoicesIndexRedirectState.NO_MESSAGE });
 		}
 
-		public async Task<IActionResult> Details(int id)
+		[Authorize]
+		public async Task<IActionResult> List()
 		{
-			return View(await _unitOfWork.Invoices.Get(id));
+			var userId = User.FindFirst("sub").Value;
+			var invoices = await _unitOfWork.Invoices.ForUser(userId);
+
+			return View(invoices);
 		}
 
+		[Authorize]
+		public async Task<IActionResult> Details(int id)
+		{
+			var userId = User.FindFirst("sub").Value;
+			var userInvoices = await _unitOfWork.Invoices.ForUser(userId);
+
+			var invoice = userInvoices.First(i => i.Id == id);
+
+			if (invoice == null)
+			{
+				return NotFound();
+			}
+
+			return View(invoice);
+		}
+
+		[Authorize(Policy = "StaffOnly")]
 		public async Task<IActionResult> Approve(int id)
 		{
 			return View(await _unitOfWork.Invoices.Get(id));
 		}
 
+		[Authorize(Policy = "StaffOnly")]
 		public async Task<IActionResult> ConfirmApprove(int id)
 		{
 			var invoices = await _unitOfWork.Invoices.GetAll();
@@ -87,7 +111,7 @@ namespace Invoices.App.Controllers
 			return View(nameof(Index), indexViewModel);
 		}
 
-		public async Task<string> InvoiceViewAsString(Invoice invoice)
+		private async Task<string> InvoiceViewAsString(Invoice invoice)
 		{
 			ViewData.Model = invoice;
 

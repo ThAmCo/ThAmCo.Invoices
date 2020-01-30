@@ -4,14 +4,16 @@ using Invoices.Data.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Invoices.Data.Migrations
 {
     [DbContext(typeof(InvoicesDbContext))]
-    partial class InvoicesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200130000125_RemoveProfilesMigration")]
+    partial class RemoveProfilesMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -1,4 +1,5 @@
-﻿using Invoices.Data.Models;
+﻿using Invoices.App.Models;
+using Invoices.Data.Models;
 using Invoices.DataAccess;
 using System;
 using System.Threading.Tasks;
@@ -18,15 +19,15 @@ namespace Invoices.App.Services.Orders
 			_tracker = tracker;
 		}
 
-		public async Task CreateInvoice(Profile profile, Order initialOrder)
+		public async Task CreateInvoice(CreateInvoiceModel model, Order initialOrder)
 		{
 			var invoice = new Invoice
 			{
-				ProfileId = profile.Id,
+				UserId = model.UserId,
 				State = InvoiceState.Unfinished,
-				Address = profile.Address,
-				Email = profile.Email,
-				Name = profile.Name
+				Address = model.Address,
+				Email = model.Email,
+				Name = model.Name
 			};
 
 			initialOrder.InvoiceId = invoice.Id;
@@ -36,12 +37,12 @@ namespace Invoices.App.Services.Orders
 			_unitOfWork.Invoices.Create(invoice);
 			await _unitOfWork.Commit();
 
-			_tracker.Track(profile.Id, invoice);
+			_tracker.Track(model.UserId, invoice);
 		}
 
-		public async Task FinaliseInvoice(int profileId)
+		public async Task FinaliseInvoice(string userId)
 		{
-			var invoice = _tracker.GetInvoice(profileId);
+			var invoice = _tracker.GetInvoice(userId);
 
 			invoice.InvoicedAt = DateTime.Now;
 			invoice.State = InvoiceState.Created;
@@ -49,12 +50,12 @@ namespace Invoices.App.Services.Orders
 			_unitOfWork.Invoices.Update(invoice);
 			await _unitOfWork.Commit();
 
-			_tracker.StopTracking(profileId);
+			_tracker.StopTracking(userId);
 		}
 
-		public async Task UpdateInvoice(int profileId, Order order)
+		public async Task UpdateInvoice(string userId, Order order)
 		{
-			var invoice = _tracker.GetInvoice(profileId);
+			var invoice = _tracker.GetInvoice(userId);
 
 			order.InvoiceId = invoice.Id;
 			order.Invoice = invoice;
@@ -62,7 +63,7 @@ namespace Invoices.App.Services.Orders
 			_unitOfWork.Orders.Update(order);
 			await _unitOfWork.Commit();
 
-			_tracker.Update(profileId, order);
+			_tracker.Update(userId, order);
 		}
 
 	}

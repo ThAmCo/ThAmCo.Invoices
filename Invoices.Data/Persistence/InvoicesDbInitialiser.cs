@@ -28,32 +28,14 @@ namespace Invoices.Data.Persistence
 				"Non-conductive Screen Protector"
 			};
 
-			var profiles = new Profile[]
-			{
-				new Profile { Name = "Sam Hammersley - Gonsalves", Address = "1 Spaghetti Drive", Email = "sam.hammersley@outlook.com" },
-				new Profile { Name = "Tom Gonsalves", Address = "18 Holey Road", Email = "t.gonsalves@ntlworld.com" },
-				new Profile { Name = "Kim Hammersley - Gonsalves", Address = "5 Hello Close", Email = "k.gonsalves@ntlworld.com" },
-				new Profile { Name = "Francesca Hammersley - Gonsalves", Address = "3 China Road", Email = "francescahammersley@gmail.com" }
-			};
-
 			var invoices = new List<Invoice>();
 			var orders = new Order[4];
 
-			for (int i = 0; i < profiles.Length; i++)
+			for (int i = 0; i < 4; i++)
 			{ 
-				var prof = profiles[i];
-				invoices.Add(new Invoice { State = InvoiceState.Created, Address = prof.Address, Name = prof.Name, Email = prof.Email, ProfileId = i + 1, InvoicedAt = new DateTime(1965, 1, 19) });
+				invoices.Add(new Invoice { UserId = "492d9bb2-a82f-4752-abbf-561872142bd1", State = InvoiceState.Created, Address = "18 Lois Lane", Name = "Samuel Spaghetti Hammersley", Email = "sam.hammersley@outlook.com", InvoicedAt = new DateTime(1965, 1, 19) });
 
-				orders[i] = new Order { InvoiceId = i + 1, Address = prof.Address, Name = prof.Name, Price = 0.99, ProductName = productNames[i + 1], PurchaseDateTime = new DateTime(1995, 11, 26) };
-			}
-
-			if (!context.Profiles.Any())
-			{
-				for (int i = 0; i < profiles.Length; i++)
-				{
-					context.Profiles.Add(profiles[i]);
-				}
-				await context.SaveChangesAsync();
+				orders[i] = new Order { InvoiceId = i + 1, Address = "18 Lois Lane", Name = "Samuel Spaghetti Hammersley", Price = 0.99, ProductName = productNames[i + 1], PurchaseDateTime = new DateTime(1995, 11, 26) };
 			}
 
 			if (!context.Invoices.Any())

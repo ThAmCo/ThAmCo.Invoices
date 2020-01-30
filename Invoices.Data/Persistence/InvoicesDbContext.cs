@@ -9,8 +9,6 @@ namespace Invoices.Data.Persistence
 
 		public DbSet<Order> Orders { get; set; }
 
-		public DbSet<Profile> Profiles { get; set; }
-
 		public DbSet<Invoice> Invoices { get; set; }
 
 		public InvoicesDbContext(DbContextOptions<InvoicesDbContext> options) : base(options)
@@ -30,8 +28,8 @@ namespace Invoices.Data.Persistence
 
 			modelBuilder.Entity<Invoice>(e =>
 			{
+				e.Property(i => i.UserId).IsRequired();
 				e.Property(i => i.State).HasConversion(converter).IsRequired();
-				e.HasOne(i => i.Profile).WithMany().HasForeignKey(i => i.ProfileId).IsRequired();
 				e.Property(i => i.Address).IsRequired();
 				e.Property(i => i.Name).IsRequired();
 				e.Property(i => i.Email).IsRequired();
@@ -46,13 +44,6 @@ namespace Invoices.Data.Persistence
 				e.Property(o => o.Address).IsRequired();
 				e.Property(o => o.Price).IsRequired();
 				e.Property(o => o.PurchaseDateTime).IsRequired();
-			});
-
-			modelBuilder.Entity<Profile>(e =>
-			{
-				e.Property(p => p.Name).IsRequired();
-				e.Property(p => p.Email).IsRequired();
-				e.Property(p => p.Address).IsRequired();
 			});
 		}
 	}

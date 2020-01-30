@@ -9,39 +9,39 @@ namespace Invoices.App.Services.Orders
 	public class InvoiceTracker
 	{
 
-		private readonly ConcurrentDictionary<int, Invoice> _invoices = new ConcurrentDictionary<int, Invoice>();
+		private readonly ConcurrentDictionary<string, Invoice> _invoices = new ConcurrentDictionary<string, Invoice>();
 
-		private readonly ConcurrentDictionary<int, DateTime> _lastChange = new ConcurrentDictionary<int, DateTime>();
+		private readonly ConcurrentDictionary<string, DateTime> _lastChange = new ConcurrentDictionary<string, DateTime>();
 
-		public void Track(int profileId, Invoice invoice)
+		public void Track(string userId, Invoice invoice)
 		{
-			_invoices.TryAdd(profileId, invoice);
+			_invoices.TryAdd(userId, invoice);
 
-			_lastChange[profileId] = DateTime.Now;
+			_lastChange[userId] = DateTime.Now;
 		}
 
-		public void Update(int profileId, Order order)
+		public void Update(string userId, Order order)
 		{
-			_invoices.TryGetValue(profileId, out Invoice invoice);
+			_invoices.TryGetValue(userId, out Invoice invoice);
 
 			order.InvoiceId = invoice.Id;
 			order.Invoice = invoice;
 
 			invoice.Orders.Add(order);
 
-			_invoices[profileId] = invoice;
-			_lastChange[profileId] = DateTime.Now;
+			_invoices[userId] = invoice;
+			_lastChange[userId] = DateTime.Now;
 		}
 
-		public void StopTracking(int profileId)
+		public void StopTracking(string userId)
 		{
-			_invoices.TryRemove(profileId, out _);
-			_lastChange.TryRemove(profileId, out _);
+			_invoices.TryRemove(userId, out _);
+			_lastChange.TryRemove(userId, out _);
 		}
 
-		public DateTime LastChange(int profileId)
+		public DateTime LastChange(string userId)
 		{
-			if (!_lastChange.TryGetValue(profileId, out DateTime lastChange))
+			if (!_lastChange.TryGetValue(userId, out DateTime lastChange))
 			{
 				throw new KeyNotFoundException();
 			}
@@ -49,14 +49,14 @@ namespace Invoices.App.Services.Orders
 			return lastChange;
 		}
 
-		public bool HasTracking(int profileId)
+		public bool HasTracking(string userId)
 		{
-			return _invoices.ContainsKey(profileId);
+			return _invoices.ContainsKey(userId);
 		}
 
-		public Invoice GetInvoice(int profileId)
+		public Invoice GetInvoice(string userId)
 		{
-			if (!_invoices.TryGetValue(profileId, out Invoice invoice))
+			if (!_invoices.TryGetValue(userId, out Invoice invoice))
 			{
 				throw new KeyNotFoundException();
 			}

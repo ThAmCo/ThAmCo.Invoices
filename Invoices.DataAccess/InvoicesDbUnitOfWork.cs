@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Invoices.Data.Persistence;
 using Invoices.DataAccess.Repository.Invoices;
-using Invoices.DataAccess.Repository.Profiles;
 using Invoices.DataAccess.Repository.Orders;
 
 namespace Invoices.DataAccess
@@ -12,8 +11,6 @@ namespace Invoices.DataAccess
 		private readonly InvoicesDbContext _context;
 
 		private IOrdersRepository _ordersRepository;
-
-		private IProfilesRepository _profilesRepository;
 
 		private IInvoicesRepository _invoiceRepository;
 
@@ -31,18 +28,6 @@ namespace Invoices.DataAccess
 					_invoiceRepository = new DbInvoicesRepository(_context.Invoices);
 				}
 				return _invoiceRepository;
-			}
-		}
-
-		public IProfilesRepository Profiles
-		{
-			get
-			{
-				if (_profilesRepository == null)
-				{
-					_profilesRepository = new DbProfilesRepository(_context.Profiles);
-				}
-				return _profilesRepository;
 			}
 		}
 

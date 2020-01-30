@@ -9,5 +9,7 @@ namespace Invoices.DataAccess.Repository.Invoices
 
 		public Task<IEnumerable<Invoice>> GetAll();
 
+		public Task<IEnumerable<Invoice>> ForUser(string userId);
+
 	}
 }

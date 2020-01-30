@@ -7,7 +7,7 @@ namespace Invoices.App.Models
 	public class PostOrderRequest
 	{
 
-		public int ProfileId { get; set; }
+		public string UserId { get; set; }
 
 		public string ProductName { get; set; }
 
@@ -20,11 +20,6 @@ namespace Invoices.App.Models
 		public string Email { get; set; }
 
 		public DateTime PurchaseDateTime { get; set; }
-
-		public Profile GetProfile()
-		{
-			return new Profile { Id = ProfileId, Address = Address, Email = Email, Name = Name };
-		}
 
 	}
 }

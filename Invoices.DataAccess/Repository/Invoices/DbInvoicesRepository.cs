@@ -15,12 +15,17 @@ namespace Invoices.DataAccess.Repository.Invoices
 
 		protected override IQueryable<Invoice> Including()
 		{
-			return _dbSet.Include(i => i.Profile).Include(i => i.Orders);
+			return _dbSet.Include(i => i.Orders);
 		}
 
 		public async Task<IEnumerable<Invoice>> GetAll()
 		{
 			return await Including().ToListAsync();
+		}
+
+		public async Task<IEnumerable<Invoice>> ForUser(string userId)
+		{
+			return await Including().Where(i => i.UserId.Equals(userId)).ToListAsync();
 		}
 	}
 }

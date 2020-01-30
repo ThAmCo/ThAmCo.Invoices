@@ -13,6 +13,8 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
     <PackageReference Include="Sendgrid" Version="9.12.0" />
+	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.0.0" />
+	<PackageReference Include="Microsoft.AspNetCore.DataProtection.AzureStorage" Version="3.0.2" />
   </ItemGroup>
 
   <ItemGroup>
