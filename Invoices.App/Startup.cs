@@ -58,9 +58,8 @@ namespace Invoices.App
 			services.AddHangfireServer();
 
 			var emailServiceTypeName = Configuration["EMAIL_SERVICE"] + "EmailService";
-			Type emailServiceType = Type.GetType("Invoices.App.Services.Email." + emailServiceTypeName);
 
-			if (emailServiceType.Equals(typeof(SendGridEmailService)))
+			if (emailServiceTypeName.Equals(nameof(SendGridEmailService)))
 			{
 				services.AddSingleton<IEmailService, SendGridEmailService>();
 			} else
