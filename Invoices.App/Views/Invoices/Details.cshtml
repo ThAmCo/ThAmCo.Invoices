@@ -13,7 +13,8 @@
 
 <br />
 <div>
-	@if (User.FindFirst("role").Value.Equals("staff", StringComparison.InvariantCultureIgnoreCase)) {
+	@if (User.FindFirst("role").Value.Equals("staff", StringComparison.InvariantCultureIgnoreCase))
+	{
 		if (Model.State.Equals(InvoiceState.Created))
 		{
 			@Html.ActionLink(linkText: "Approve", actionName: "ConfirmApprove", routeValues: new { id = @Model.Id }, htmlAttributes: new { @class = "btn btn-outline-primary btn-sm" })
@@ -23,8 +24,7 @@
 			@Html.ActionLink(linkText: "Approve", actionName: "", routeValues: new { }, htmlAttributes: new { @class = "btn btn-outline-primary btn-sm disabled" })
 		}
 	}
-	<a class="btn btn-outline-primary btn-sm"
-	   href="@Config.GetConnectionString("OrdersConnection")/orders/history">View Order History</a>
+	@Html.ActionLink(linkText: "View Order History", actionName: "history", controllerName: "orders", routeValues: new { }, htmlAttributes: new { @class = "btn btn-outline-primary btn-sm" })
 </div>
 
 <hr />
