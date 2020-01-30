@@ -50,10 +50,7 @@ namespace Invoices.App.Controllers
 		[Authorize]
 		public async Task<IActionResult> Details(int id)
 		{
-			var userId = User.FindFirst("sub").Value;
-			var userInvoices = await _unitOfWork.Invoices.ForUser(userId);
-
-			var invoice = userInvoices.First(i => i.Id == id);
+			var invoice = await _unitOfWork.Invoices.Get(id);
 
 			if (invoice == null)
 			{
