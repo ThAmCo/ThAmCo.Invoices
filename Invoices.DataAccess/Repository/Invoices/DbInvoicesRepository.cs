@@ -1,5 +1,6 @@
 ﻿using Invoices.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,7 +26,7 @@ namespace Invoices.DataAccess.Repository.Invoices
 
 		public async Task<IEnumerable<Invoice>> ForUser(string userId)
 		{
-			return await Including().Where(i => i.UserId.Equals(userId)).ToListAsync();
+			return await Including().Where(i => i.UserId.Equals(userId, StringComparison.InvariantCultureIgnoreCase)).ToListAsync();
 		}
 	}
 }

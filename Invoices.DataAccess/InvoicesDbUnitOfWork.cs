@@ -10,9 +10,9 @@ namespace Invoices.DataAccess
 
 		private readonly InvoicesDbContext _context;
 
-		private IOrdersRepository _ordersRepository;
+		private DbOrdersRepository _ordersRepository;
 
-		private IInvoicesRepository _invoiceRepository;
+		private DbInvoicesRepository _invoiceRepository;
 
 		public InvoicesDbUnitOfWork(InvoicesDbContext context)
 		{
