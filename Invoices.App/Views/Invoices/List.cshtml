@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Invoices.Data.Models.Invoice>
+﻿@using Invoices.Data.Models
+@model IEnumerable<Invoices.Data.Models.Invoice>
 
 @{
 	ViewData["Title"] = "List";
@@ -51,7 +52,14 @@ else
 						@Html.DisplayFor(modelItem => item.Address)
 					</td>
 					<td>
-						@Html.DisplayFor(modelItem => item.InvoicedAt)
+						@if (item.State.Equals(InvoiceState.Unfinished))
+						{
+							@Html.Display("Not yet created")
+						}
+						else
+						{
+							@Html.DisplayFor(modelItem => item.InvoicedAt)
+						}
 					</td>
 				</tr>
 			}
